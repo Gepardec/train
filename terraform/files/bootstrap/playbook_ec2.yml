@@ -1,0 +1,94 @@
+- hosts: all
+  tasks:
+     - name: Set Password for user
+       tags: setpassword
+       become: yes
+       user:
+         name: "{{ ansible_user }}"
+         password: "$6$7VxnH6FvL3TLv/RW$nQ5d6GvNfgOARbb4Rwv6TE677S8mvKcxMldr9H33R5xOVEaT/bhVHQsGx4ScpmoPK6LZAtnxZAFs9IGZPWJ8v1"
+     - name: Install needed packages
+       become: yes
+       dnf: name=podman,podman-compose,unzip,git,time,bc,chromium,gedit,net-tools state=installed
+     - name: create needed dirs
+       loop:
+         - Downloads
+       file:
+         state: directory
+         path: "{{ ansible_env.HOME }}/{{ item }}"
+     - name: Copy nomachine
+       copy:
+         src: /home/hwirnsberger/trainings/packer-vms/troubleshooting_vm/bin/nomachine-enterprise-desktop_6.9.2_1_x86_64.rpm
+         dest: "{{ ansible_env.HOME }}/Downloads/nomachine-enterprise-desktop_6.9.2_1_x86_64.rpm"
+     - name: Install nomachine
+       become: yes
+       shell: "dnf install -y {{ ansible_env.HOME }}/Downloads/nomachine-enterprise-desktop_6.9.2_1_x86_64.rpm"
+     - name: Set Locales and Timezone
+       become: yes
+       shell: "localectl set-locale de_AT.UTF-8"
+     - name: Set Locales and Timezone
+       become: yes
+       shell: "localectl set-keymap at"
+     - name: Set Locales and Timezone
+       become: yes
+       shell: "localectl set-keymap at-nodeadkeys"
+     - name: Set Locales and Timezone
+       become: yes
+       shell: "timedatectl set-timezone Europe/Vienna"
+     - name: Copy Elastic-APM
+       copy:
+         src: /home/hwirnsberger/trainings/packer-vms/troubleshooting_vm/bin/elastic-apm/
+         dest: "{{ ansible_env.HOME }}/elastic-apm/"
+     - name: Start Elastic APM
+       become: yes
+       shell:
+         chdir: "{{ ansible_env.HOME }}/elastic-apm/"
+         cmd: "podman-compose up -d"
+     - name: create needed dirs
+       loop:
+         - bin/
+         - java/
+       file:
+         state: directory
+         path: "{{ ansible_env.HOME }}/{{ item }}"
+     - name: Copy and unpack IBM JDK
+       unarchive:
+         src: /home/hwirnsberger/trainings/packer-vms/troubleshooting_vm/bin/java/ibm-java-x86_64-80.zip
+         dest: "{{ ansible_env.HOME }}/java/"
+     - name: Copy and unpack Oracle JDK
+       unarchive:
+         src: /home/hwirnsberger/trainings/packer-vms/troubleshooting_vm/bin/java/jdk1.8.0_201-amd64.zip
+         dest: "{{ ansible_env.HOME }}/java/"
+     - name: set default java
+       lineinfile:
+         path: "{{ ansible_env.HOME }}/.bashrc"
+         line: PATH="{{ ansible_env.HOME }}/java/jdk1.8.0_201-amd64/bin/:$PATH"
+     - name: Copy JBoss
+       copy:
+         src: /home/hwirnsberger/trainings/packer-vms/troubleshooting_vm/bin/jboss/jboss-eap-7.2.2.zip
+         dest: "{{ ansible_env.HOME }}/Downloads/"
+     - name: Copy JBoss RC config
+       template:
+         src: /home/hwirnsberger/trainings/packer-vms/troubleshooting_vm/bin/jboss/eap7rc
+         dest: "{{ ansible_env.HOME }}/.eap7rc"
+     - name: Copy JBoss Tools
+       copy:
+         src: /home/hwirnsberger/trainings/packer-vms/troubleshooting_vm/bin/jboss/eap7
+         dest: "{{ ansible_env.HOME }}/bin/eap7"
+         mode: preserve
+     - name: Copy MAT
+       unarchive:
+         src: /home/hwirnsberger/trainings/packer-vms/troubleshooting_vm/bin/mat.zip
+         dest: "{{ ansible_env.HOME }}/"
+     - name: Clone Troubleshooting Workshop
+       git:
+         repo: https://github.com/Gepardec/TroubleshootingWorkshop.git
+         dest: "{{ ansible_env.HOME }}/TroubleshootingWorkshop"
+     - name: Add alias
+       loop:
+         - alias cdl="cd {{ ansible_env.HOME }}/jboss-eap-7.2.2/standalone/log/"
+         - alias cdc="cd {{ ansible_env.HOME }}/jboss-eap-7.2.2/standalone/configuration/"
+         - alias cdd="cd {{ ansible_env.HOME }}/jboss-eap-7.2.2/standalone/deployments/"
+         - alias cdb="cd {{ ansible_env.HOME }}/jboss-eap-7.2.2/bin/"
+       lineinfile:
+         path: "{{ ansible_env.HOME }}/.bashrc"
+         line: "{{ item }}"
