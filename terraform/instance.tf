@@ -1,6 +1,5 @@
 data "aws_ami" "centos" {
   most_recent = true
-
   filter {
     name   = "name"
     values = ["CentOS Linux 7 x86_64 HVM *"]
@@ -15,12 +14,12 @@ data "aws_ami" "centos" {
 }
 
 resource "aws_instance" "main" {
-  ami             = data.aws_ami.centos.id
+  ami             = "ami-05f145d9b6c677dbb"
   count           = var.instance_replica
   instance_type   = var.instance_type
-  key_name        = "${var.resource_prefix}_${count.index}"
+  key_name        = "fedoraec2"
   subnet_id       = aws_subnet.main.id
-  user_data       = file("files/bootstrap/${var.bootstrap_file}")
+  #user_data       = file("files/bootstrap/${var.bootstrap_file}")
   vpc_security_group_ids = ["${aws_security_group.main.id}"]
   
   root_block_device {
