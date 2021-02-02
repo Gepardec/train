@@ -1,7 +1,7 @@
 - hosts: all
   tasks:
      - name: Set Password for user
-       tags: setpassword
+       tags: reconfigure
        become: yes
        user:
          name: "{{ ansible_user }}"
@@ -20,8 +20,9 @@
          src: /home/hwirnsberger/trainings/packer-vms/troubleshooting_vm/bin/nomachine-enterprise-desktop_6.9.2_1_x86_64.rpm
          dest: "{{ ansible_env.HOME }}/Downloads/nomachine-enterprise-desktop_6.9.2_1_x86_64.rpm"
      - name: Install nomachine
+       tags: reconfigure
        become: yes
-       shell: "dnf install -y {{ ansible_env.HOME }}/Downloads/nomachine-enterprise-desktop_6.9.2_1_x86_64.rpm"
+       shell: "rm -rf /usr/NX && dnf install -y {{ ansible_env.HOME }}/Downloads/nomachine-enterprise-desktop_6.9.2_1_x86_64.rpm"
      - name: Set Locales and Timezone
        become: yes
        shell: "localectl set-locale de_AT.UTF-8"
