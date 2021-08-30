@@ -28,6 +28,7 @@ resource "aws_instance" "main" {
   }
 
   metadata_options {
+      http_endpoint = "enabled"
       http_tokens = "required"
   }
   

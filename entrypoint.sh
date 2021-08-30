@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 FLAG_DRYRUN=false
 
@@ -49,10 +49,10 @@ function create_ansible_inventory {
 
 function main {
   # check if aws config is mounted
-  if [[ ! -f "$(echo ~)/.aws/credentials" ]]; then
+  if [[ ! -f "$(echo ~)/.aws/config" ]]; then
     usage
     echo 
-    echo "aws credentials not found. Please mount ~/.aws folder"
+    echo "aws config not found. Please mount ~/.aws folder"
     exit 1
   fi
   # source terraform variables
