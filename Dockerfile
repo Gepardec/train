@@ -1,6 +1,6 @@
-FROM hashicorp/terraform:1.0.4
+FROM alpine
 
-RUN apk add --no-cache jq 
+RUN apk add --no-cache terraform jq openssh-keygen
 WORKDIR /opt/train
 COPY . .
 ENTRYPOINT [ "./entrypoint.sh" ]
