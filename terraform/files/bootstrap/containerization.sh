@@ -30,6 +30,8 @@ cat << EOF > /tmp/playbook.yml
           - name: nano
           - name: gcc
           - name: httping
+          - name: iscsi-initiator-utils
+          - name: nfs-utils
     - include_role:
         name: ckaserer.bashrc
       vars: 
