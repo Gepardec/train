@@ -43,7 +43,7 @@ Now we can create our workshop environment via
    docker run --rm -it \
      -v $(echo ~)/.aws:/root/.aws:ro \
      -v $(pwd)/workdir:/opt/train/workdir \
-      ghcr.io/ckaserer/train:latest apply
+      ghcr.io/gepardec/train:latest apply
 
 Resulting in an output similar to this
 
@@ -125,14 +125,14 @@ Destroy a Workshop
    docker run --rm -it \
      -v $(echo ~)/.aws:/root/.aws:ro \
      -v $(pwd)/workdir:/opt/train/workdir \
-     ghcr.io/ckaserer/train:latest destroy
+     ghcr.io/gepardec/train:latest destroy
 
 Resulting in an output similar to this
 
 .. code-block:: bash
 
 
-   # terraform init -backend-config='key=train/ckaserer_helloworld_us-west-1' terraform
+   # terraform init -backend-config='key=train/trainerin_helloworld_us-west-1' terraform
 
    Initializing the backend...
 
