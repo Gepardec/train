@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Architecture &mdash; workshop infra latest documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Why Terraform?!" href="misc.html" />
+    <link rel="prev" title="Create a new Workshop" href="workshop_create.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> workshop infra
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">First Steps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="first_steps/provision.html">Provision a Workshop</a></li>
+<li class="toctree-l1"><a class="reference internal" href="first_steps/access.html">Access a Workshop Instance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="first_steps/variables.html">All about Variables</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Available Workshops</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="workshop_list.html">Available Workshops</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">A new Workshop</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="workshop_create.html">Create a new Workshop</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Architecture</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Architecture</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Misc</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="misc.html">Why Terraform?!</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contribution Guideline</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="contribute.html">Contribute to our Docs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">workshop infra</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Architecture</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/ckaserer/train/blob/master/docs/source/architecture.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="architecture">
+<h1>Architecture<a class="headerlink" href="#architecture" title="Permalink to this headline"></a></h1>
+<p>In the architecture section we will cover which resource get provision in AWS, what those variables in <code class="code docutils literal notranslate"><span class="pre">workdir/variables.tfvars</span></code> specify in more details and you get to look at an awesome infrastructure architecture diagram.</p>
+<p>Each workshop will be provisioned in a single AWS region (e.g. us-west-1) and is encapseled in a dedicated VPC. The Internet Gateway, Security groups and Route Table in our VPC are configured to allow all ingress / egress traffic for ease of use.</p>
+<p>All resource are tagged with a <code class="code docutils literal notranslate"><span class="pre">created</span></code> tag containing the terraform creation timestamp and an <code class="code docutils literal notranslate"><span class="pre">owner</span></code> tag containing the owner specified in <code class="code docutils literal notranslate"><span class="pre">workdir/variables.tfvars</span></code>.</p>
+<p>Each instance is accessible with an unique auto generated ssh key which can be found in <code class="code docutils literal notranslate"><span class="pre">workdir/</span></code> after you have applied a terraform script.</p>
+<p>Terraform state is the only element that is fixed to an S3 bucket named <code class="code docutils literal notranslate"><span class="pre">gepardec-terraform-state</span></code> in the <code class="code docutils literal notranslate"><span class="pre">us-east-1</span></code> region.</p>
+<img alt="Architecture Diagram" src="_images/architecture.png" />
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="workshop_create.html" class="btn btn-neutral float-left" title="Create a new Workshop" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="misc.html" class="btn btn-neutral float-right" title="Why Terraform?!" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

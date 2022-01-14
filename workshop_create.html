@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create a new Workshop &mdash; workshop infra latest documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Architecture" href="architecture.html" />
+    <link rel="prev" title="Available Workshops" href="workshop_list.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> workshop infra
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">First Steps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="first_steps/provision.html">Provision a Workshop</a></li>
+<li class="toctree-l1"><a class="reference internal" href="first_steps/access.html">Access a Workshop Instance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="first_steps/variables.html">All about Variables</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Available Workshops</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="workshop_list.html">Available Workshops</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">A new Workshop</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Create a new Workshop</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#make-it-work">Make it work</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#write-it-down">Write it down</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#faq">FAQ</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Architecture</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Misc</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="misc.html">Why Terraform?!</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contribution Guideline</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="contribute.html">Contribute to our Docs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">workshop infra</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Create a new Workshop</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/ckaserer/train/blob/master/docs/source/workshop_create.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="create-a-new-workshop">
+<h1>Create a new Workshop<a class="headerlink" href="#create-a-new-workshop" title="Permalink to this headline"></a></h1>
+<p>You came to the right place if the current selection of available workshops does not fit your need and you want to create a new one.</p>
+<section id="make-it-work">
+<h2>Make it work<a class="headerlink" href="#make-it-work" title="Permalink to this headline"></a></h2>
+<p>Create a new bootstrap script in <code class="code docutils literal notranslate"><span class="pre">terraform/files/bootstrap/</span></code> with a descriptive name. The file name will later be used to reference the correct bootstrap script via the terraform variable <code class="code docutils literal notranslate"><span class="pre">bootstrap_file</span></code>. We will name our example file <code class="code docutils literal notranslate"><span class="pre">myBootStrapFile.sh</span></code> for the rest of the documentation.</p>
+<p>The bootstrap script itself needs to be executable. You can add the executable flag via</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>chmod +x myBootStrapFile.sh
+</pre></div>
+</div>
+<p>Before we fill our bootstrap script with commands we add <a class="reference external" href="https://linuxize.com/post/bash-shebang/">Shebangs</a> as first line to our file.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+</pre></div>
+</div>
+<p>Once we got the Shebang in place we can add our infrastructure provisioning steps. For little things like our <code class="code docutils literal notranslate"><span class="pre">helloworld.sh</span></code> we just use bash to do it all. For more complex scenarios we highly recommend you use ansible instead.</p>
+<p>How can you use ansible in your provisioning process? You need make sure ansible is installed and you need to get your playbook from somewhere, preferably a git repo containing your playbook.</p>
+</section>
+<section id="write-it-down">
+<h2>Write it down<a class="headerlink" href="#write-it-down" title="Permalink to this headline"></a></h2>
+<p>Please add your workshop to the list of available workshops in <code class="code docutils literal notranslate"><span class="pre">docs/source/workshop_list.rst</span></code> with a short summary of your workshop and the packages installed.</p>
+<p>To publish the changes you need to build the documentation again via</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> docs
+make clean <span class="o">&amp;&amp;</span> make html
+</pre></div>
+</div>
+<p>and commit it to git.</p>
+<p>Further information how to contribute to our repo can be found in our <a class="reference internal" href="contribute.html"><span class="doc">Contribution</span></a> section.</p>
+</section>
+<hr class="docutils" />
+<section id="faq">
+<h2>FAQ<a class="headerlink" href="#faq" title="Permalink to this headline"></a></h2>
+<p><strong>Q:</strong> Can my bootstrap script call other scripts in the bootstrap folder?</p>
+<p><strong>A:</strong> No, it can’t. Only one file can be uploaded to an ec2 instance to bootstrap it. If you really require more files you need to script it in a way that your bootstrap script fetches additional files for you.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="workshop_list.html" class="btn btn-neutral float-left" title="Available Workshops" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="architecture.html" class="btn btn-neutral float-right" title="Architecture" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

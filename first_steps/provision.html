@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Provision a Workshop &mdash; workshop infra latest documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Access a Workshop Instance" href="access.html" />
+    <link rel="prev" title="Welcome to our workshop infra docs!" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> workshop infra
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">First Steps</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Provision a Workshop</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#iam-programatic-access">IAM programatic access</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id1">Provision a Workshop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#destroy-a-workshop">Destroy a Workshop</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="access.html">Access a Workshop Instance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="variables.html">All about Variables</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Available Workshops</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../workshop_list.html">Available Workshops</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">A new Workshop</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../workshop_create.html">Create a new Workshop</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Architecture</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Architecture</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Misc</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../misc.html">Why Terraform?!</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contribution Guideline</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contribute.html">Contribute to our Docs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">workshop infra</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Provision a Workshop</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/ckaserer/train/blob/master/docs/source/first_steps/provision.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="provision-a-workshop">
+<h1>Provision a Workshop<a class="headerlink" href="#provision-a-workshop" title="Permalink to this headline"></a></h1>
+<section id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p>AWS IAM with programatic access</p></li>
+<li><p>docker</p></li>
+</ul>
+</section>
+<section id="iam-programatic-access">
+<h2>IAM programatic access<a class="headerlink" href="#iam-programatic-access" title="Permalink to this headline"></a></h2>
+<p>You need to create an AWS IAM user with programatic access and store the credentials on your workstation. For the rest of the doc we will assume that your aws credentials file exists as <code class="code docutils literal notranslate"><span class="pre">~/.aws/credentials</span></code>.</p>
+</section>
+<section id="id1">
+<h2>Provision a Workshop<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h2>
+<p>Create a new folder, let’s name it <code class="code docutils literal notranslate"><span class="pre">workdir</span></code> for the remainder of the section.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir workdir
+</pre></div>
+</div>
+<p>In our <code class="code docutils literal notranslate"><span class="pre">workdir</span></code> we create a new file named <code class="code docutils literal notranslate"><span class="pre">variables.tfvars</span></code> with the workshop specification we want to provision.</p>
+<p>Next we need to populate our file. Let’s say I, <code class="code docutils literal notranslate"><span class="pre">Jon</span> <span class="pre">Doe</span> <span class="pre">&lt;jdoe&gt;</span></code>, want to provision a workshop for <code class="code docutils literal notranslate"><span class="pre">1</span></code> participant(s) with <code class="code docutils literal notranslate"><span class="pre">t2.micro</span></code> instances in <code class="code docutils literal notranslate"><span class="pre">us-west-1</span></code>. In order to avoid resource naming conflicts we prefix our resource with <code class="code docutils literal notranslate"><span class="pre">helloworld</span></code>. This would result in</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">aws_region</span>       <span class="o">=</span> <span class="s2">&quot;us-west-1&quot;</span>
+<span class="nv">bootstrap_file</span>   <span class="o">=</span> <span class="s2">&quot;helloworld.sh&quot;</span>
+<span class="nv">instance_replica</span> <span class="o">=</span> <span class="m">1</span>
+<span class="nv">instance_type</span>    <span class="o">=</span> <span class="s2">&quot;t2.micro&quot;</span>
+<span class="nv">owner</span>            <span class="o">=</span> <span class="s2">&quot;jdoe&quot;</span>
+<span class="nv">resource_prefix</span>  <span class="o">=</span> <span class="s2">&quot;helloworld&quot;</span>
+</pre></div>
+</div>
+<p>If you want a bit more explaination in regard to what those variable are for you can check out <a class="reference internal" href="variables.html"><span class="doc">Variables</span></a>.</p>
+<p>Now we can create our workshop environment via</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker run --rm -it <span class="se">\</span>
+  -v <span class="k">$(</span><span class="nb">echo</span> ~<span class="k">)</span>/.aws:/root/.aws:ro <span class="se">\</span>
+  -v <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/workdir:/opt/train/workdir <span class="se">\</span>
+   ghcr.io/gepardec/train:latest apply
+</pre></div>
+</div>
+<p>Resulting in an output similar to this</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># terraform init -backend-config=&#39;key=train/jdoe_helloworld_us-west-1&#39; terraform</span>
+
+Initializing the backend...
+
+Successfully configured the backend <span class="s2">&quot;s3&quot;</span>! Terraform will automatically
+use this backend unless the backend configuration changes.
+
+Initializing provider plugins...
+- Checking <span class="k">for</span> available provider plugins...
+- Downloading plugin <span class="k">for</span> provider <span class="s2">&quot;aws&quot;</span> <span class="o">(</span>hashicorp/aws<span class="o">)</span> <span class="m">2</span>.57.0...
+
+The following providers <span class="k">do</span> not have any version constraints <span class="k">in</span> configuration,
+so the latest version was installed.
+
+To prevent automatic upgrades to new major versions that may contain breaking
+changes, it is recommended to add <span class="nv">version</span> <span class="o">=</span> <span class="s2">&quot;...&quot;</span> constraints to the
+corresponding provider blocks <span class="k">in</span> configuration, with the constraint strings
+suggested below.
+
+* provider.aws: <span class="nv">version</span> <span class="o">=</span> <span class="s2">&quot;~&gt; 2.57&quot;</span>
+
+Terraform has been successfully initialized!
+
+You may now begin working with Terraform. Try running <span class="s2">&quot;terraform plan&quot;</span> to see
+any changes that are required <span class="k">for</span> your infrastructure. All Terraform commands
+should now work.
+
+If you ever <span class="nb">set</span> or change modules or backend configuration <span class="k">for</span> Terraform,
+rerun this <span class="nb">command</span> to reinitialize your working directory. If you forget, other
+commands will detect it and remind you to <span class="k">do</span> so <span class="k">if</span> necessary.
+<span class="c1"># mkdir -p workdir/helloworld/0</span>
+<span class="c1"># ssh-keygen -t rsa -b 4096 -f workdir/helloworld/0/access -q -N &#39;&#39;</span>
+<span class="c1"># terraform apply -var-file=&#39;workdir/variables.tfvars&#39; -auto-approve terraform</span>
+data.aws_ami.centos: Refreshing state...
+aws_vpc.main: Creating...
+aws_key_pair.main<span class="o">[</span><span class="m">0</span><span class="o">]</span>: Creating...
+aws_key_pair.main<span class="o">[</span><span class="m">0</span><span class="o">]</span>: Creation <span class="nb">complete</span> after 4s <span class="o">[</span><span class="nv">id</span><span class="o">=</span>helloworld_0<span class="o">]</span>
+aws_vpc.main: Still creating... <span class="o">[</span>10s elapsed<span class="o">]</span>
+aws_vpc.main: Creation <span class="nb">complete</span> after 11s <span class="o">[</span><span class="nv">id</span><span class="o">=</span>vpc-04808488d3bebc0ac<span class="o">]</span>
+aws_internet_gateway.main: Creating...
+aws_subnet.main: Creating...
+aws_security_group.main: Creating...
+aws_subnet.main: Creation <span class="nb">complete</span> after 6s <span class="o">[</span><span class="nv">id</span><span class="o">=</span>subnet-068847305a316a713<span class="o">]</span>
+aws_internet_gateway.main: Creation <span class="nb">complete</span> after 7s <span class="o">[</span><span class="nv">id</span><span class="o">=</span>igw-0239c6cc5df123477<span class="o">]</span>
+aws_route_table.main: Creating...
+aws_security_group.main: Still creating... <span class="o">[</span>10s elapsed<span class="o">]</span>
+aws_security_group.main: Creation <span class="nb">complete</span> after 11s <span class="o">[</span><span class="nv">id</span><span class="o">=</span>sg-0fb8b0d5c66886475<span class="o">]</span>
+aws_instance.main<span class="o">[</span><span class="m">0</span><span class="o">]</span>: Creating...
+aws_route_table.main: Creation <span class="nb">complete</span> after 6s <span class="o">[</span><span class="nv">id</span><span class="o">=</span>rtb-04ef8a9883b563761<span class="o">]</span>
+aws_route_table_association.main: Creating...
+aws_route_table_association.main: Creation <span class="nb">complete</span> after 2s <span class="o">[</span><span class="nv">id</span><span class="o">=</span>rtbassoc-0f146f884068e3658<span class="o">]</span>
+aws_instance.main<span class="o">[</span><span class="m">0</span><span class="o">]</span>: Still creating... <span class="o">[</span>10s elapsed<span class="o">]</span>
+aws_instance.main<span class="o">[</span><span class="m">0</span><span class="o">]</span>: Still creating... <span class="o">[</span>20s elapsed<span class="o">]</span>
+aws_instance.main<span class="o">[</span><span class="m">0</span><span class="o">]</span>: Still creating... <span class="o">[</span>30s elapsed<span class="o">]</span>
+aws_instance.main<span class="o">[</span><span class="m">0</span><span class="o">]</span>: Creation <span class="nb">complete</span> after 36s <span class="o">[</span><span class="nv">id</span><span class="o">=</span>i-01462142ede2b68d3<span class="o">]</span>
+
+Apply complete! Resources: <span class="m">8</span> added, <span class="m">0</span> changed, <span class="m">0</span> destroyed.
+
+Outputs:
+
+<span class="nv">instance_ips</span> <span class="o">=</span> <span class="o">[</span>
+<span class="o">[</span>
+   <span class="s2">&quot;52.53.254.171&quot;</span>,
+<span class="o">]</span>,
+<span class="o">]</span>
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="destroy-a-workshop">
+<h2>Destroy a Workshop<a class="headerlink" href="#destroy-a-workshop" title="Permalink to this headline"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker run --rm -it <span class="se">\</span>
+  -v <span class="k">$(</span><span class="nb">echo</span> ~<span class="k">)</span>/.aws:/root/.aws:ro <span class="se">\</span>
+  -v <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/workdir:/opt/train/workdir <span class="se">\</span>
+  ghcr.io/gepardec/train:latest destroy
+</pre></div>
+</div>
+<p>Resulting in an output similar to this</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># terraform init -backend-config=&#39;key=train/trainerin_helloworld_us-west-1&#39; terraform</span>
+
+Initializing the backend...
+
+Initializing provider plugins...
+
+The following providers <span class="k">do</span> not have any version constraints <span class="k">in</span> configuration,
+so the latest version was installed.
+
+To prevent automatic upgrades to new major versions that may contain breaking
+changes, it is recommended to add <span class="nv">version</span> <span class="o">=</span> <span class="s2">&quot;...&quot;</span> constraints to the
+corresponding provider blocks <span class="k">in</span> configuration, with the constraint strings
+suggested below.
+
+* provider.aws: <span class="nv">version</span> <span class="o">=</span> <span class="s2">&quot;~&gt; 2.57&quot;</span>
+
+Terraform has been successfully initialized!
+
+You may now begin working with Terraform. Try running <span class="s2">&quot;terraform plan&quot;</span> to see
+any changes that are required <span class="k">for</span> your infrastructure. All Terraform commands
+should now work.
+
+If you ever <span class="nb">set</span> or change modules or backend configuration <span class="k">for</span> Terraform,
+rerun this <span class="nb">command</span> to reinitialize your working directory. If you forget, other
+commands will detect it and remind you to <span class="k">do</span> so <span class="k">if</span> necessary.
+<span class="c1"># terraform destroy -var-file=&#39;workdir/variables.tfvars&#39; -auto-approve terraform</span>
+aws_key_pair.main<span class="o">[</span><span class="m">0</span><span class="o">]</span>: Refreshing state... <span class="o">[</span><span class="nv">id</span><span class="o">=</span>helloworld_0<span class="o">]</span>
+data.aws_ami.centos: Refreshing state...
+aws_vpc.main: Refreshing state... <span class="o">[</span><span class="nv">id</span><span class="o">=</span>vpc-04808488d3bebc0ac<span class="o">]</span>
+aws_internet_gateway.main: Refreshing state... <span class="o">[</span><span class="nv">id</span><span class="o">=</span>igw-0239c6cc5df123477<span class="o">]</span>
+aws_subnet.main: Refreshing state... <span class="o">[</span><span class="nv">id</span><span class="o">=</span>subnet-068847305a316a713<span class="o">]</span>
+aws_security_group.main: Refreshing state... <span class="o">[</span><span class="nv">id</span><span class="o">=</span>sg-0fb8b0d5c66886475<span class="o">]</span>
+aws_route_table.main: Refreshing state... <span class="o">[</span><span class="nv">id</span><span class="o">=</span>rtb-04ef8a9883b563761<span class="o">]</span>
+aws_instance.main<span class="o">[</span><span class="m">0</span><span class="o">]</span>: Refreshing state... <span class="o">[</span><span class="nv">id</span><span class="o">=</span>i-01462142ede2b68d3<span class="o">]</span>
+aws_route_table_association.main: Refreshing state... <span class="o">[</span><span class="nv">id</span><span class="o">=</span>rtbassoc-0f146f884068e3658<span class="o">]</span>
+aws_key_pair.main<span class="o">[</span><span class="m">0</span><span class="o">]</span>: Destroying... <span class="o">[</span><span class="nv">id</span><span class="o">=</span>helloworld_0<span class="o">]</span>
+aws_route_table_association.main: Destroying... <span class="o">[</span><span class="nv">id</span><span class="o">=</span>rtbassoc-0f146f884068e3658<span class="o">]</span>
+aws_instance.main<span class="o">[</span><span class="m">0</span><span class="o">]</span>: Destroying... <span class="o">[</span><span class="nv">id</span><span class="o">=</span>i-01462142ede2b68d3<span class="o">]</span>
+aws_route_table_association.main: Destruction <span class="nb">complete</span> after 0s
+aws_route_table.main: Destroying... <span class="o">[</span><span class="nv">id</span><span class="o">=</span>rtb-04ef8a9883b563761<span class="o">]</span>
+aws_key_pair.main<span class="o">[</span><span class="m">0</span><span class="o">]</span>: Destruction <span class="nb">complete</span> after 0s
+aws_route_table.main: Destruction <span class="nb">complete</span> after 3s
+aws_internet_gateway.main: Destroying... <span class="o">[</span><span class="nv">id</span><span class="o">=</span>igw-0239c6cc5df123477<span class="o">]</span>
+aws_instance.main<span class="o">[</span><span class="m">0</span><span class="o">]</span>: Still destroying... <span class="o">[</span><span class="nv">id</span><span class="o">=</span>i-01462142ede2b68d3, 10s elapsed<span class="o">]</span>
+aws_internet_gateway.main: Still destroying... <span class="o">[</span><span class="nv">id</span><span class="o">=</span>igw-0239c6cc5df123477, 10s elapsed<span class="o">]</span>
+aws_internet_gateway.main: Destruction <span class="nb">complete</span> after 15s
+aws_instance.main<span class="o">[</span><span class="m">0</span><span class="o">]</span>: Still destroying... <span class="o">[</span><span class="nv">id</span><span class="o">=</span>i-01462142ede2b68d3, 20s elapsed<span class="o">]</span>
+aws_instance.main<span class="o">[</span><span class="m">0</span><span class="o">]</span>: Still destroying... <span class="o">[</span><span class="nv">id</span><span class="o">=</span>i-01462142ede2b68d3, 30s elapsed<span class="o">]</span>
+aws_instance.main<span class="o">[</span><span class="m">0</span><span class="o">]</span>: Destruction <span class="nb">complete</span> after 33s
+aws_subnet.main: Destroying... <span class="o">[</span><span class="nv">id</span><span class="o">=</span>subnet-068847305a316a713<span class="o">]</span>
+aws_security_group.main: Destroying... <span class="o">[</span><span class="nv">id</span><span class="o">=</span>sg-0fb8b0d5c66886475<span class="o">]</span>
+aws_security_group.main: Destruction <span class="nb">complete</span> after 1s
+aws_subnet.main: Destruction <span class="nb">complete</span> after 1s
+aws_vpc.main: Destroying... <span class="o">[</span><span class="nv">id</span><span class="o">=</span>vpc-04808488d3bebc0ac<span class="o">]</span>
+aws_vpc.main: Destruction <span class="nb">complete</span> after 1s
+
+Destroy complete! Resources: <span class="m">8</span> destroyed.
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../index.html" class="btn btn-neutral float-left" title="Welcome to our workshop infra docs!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="access.html" class="btn btn-neutral float-right" title="Access a Workshop Instance" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

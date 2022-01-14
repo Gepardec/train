@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>All about Variables &mdash; workshop infra latest documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Available Workshops" href="../workshop_list.html" />
+    <link rel="prev" title="Access a Workshop Instance" href="access.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> workshop infra
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">First Steps</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="provision.html">Provision a Workshop</a></li>
+<li class="toctree-l1"><a class="reference internal" href="access.html">Access a Workshop Instance</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">All about Variables</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#aws-region">aws_region</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#bootstrap-file">bootstrap_file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#instance-replica">instance_replica</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#instance-type">instance_type</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#owner">owner</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#resource-prefix">resource_prefix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ami-name">ami_name</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ami-owners">ami_owners</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Available Workshops</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../workshop_list.html">Available Workshops</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">A new Workshop</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../workshop_create.html">Create a new Workshop</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Architecture</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Architecture</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Misc</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../misc.html">Why Terraform?!</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contribution Guideline</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contribute.html">Contribute to our Docs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">workshop infra</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>All about Variables</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/ckaserer/train/blob/master/docs/source/first_steps/variables.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="all-about-variables">
+<h1>All about Variables<a class="headerlink" href="#all-about-variables" title="Permalink to this headline"></a></h1>
+<p>All variables that you should change can be set in <code class="code docutils literal notranslate"><span class="pre">workdir/variables.tfvars</span></code>. Let’s go through each variable in detail.</p>
+<hr class="docutils" />
+<section id="aws-region">
+<h2>aws_region<a class="headerlink" href="#aws-region" title="Permalink to this headline"></a></h2>
+<p>The entire workshop infrastructure (e.g. us-west-1) will be provisioned in the AWS region specified by <code class="code docutils literal notranslate"><span class="pre">aws_region</span> <span class="pre">=</span> <span class="pre">&quot;us-west-1&quot;</span></code>.</p>
+</section>
+<hr class="docutils" />
+<section id="bootstrap-file">
+<h2>bootstrap_file<a class="headerlink" href="#bootstrap-file" title="Permalink to this headline"></a></h2>
+<p>Each EC2 instance will execute the file (e.g. helloworld.sh) specified by <code class="code docutils literal notranslate"><span class="pre">bootstrap_file</span> <span class="pre">=</span> <span class="pre">&quot;helloworld.sh&quot;</span></code>. The bootstrap file needs to exist in <code class="code docutils literal notranslate"><span class="pre">terraform/files/bootstrap/</span></code> and has the execution flag set. More on bootstrap files in “A new Workshop”.</p>
+</section>
+<hr class="docutils" />
+<section id="instance-replica">
+<h2>instance_replica<a class="headerlink" href="#instance-replica" title="Permalink to this headline"></a></h2>
+<p>defines the number of EC2 instances that shall be created by terrafrom in the specified region.</p>
+</section>
+<hr class="docutils" />
+<section id="instance-type">
+<h2>instance_type<a class="headerlink" href="#instance-type" title="Permalink to this headline"></a></h2>
+<p>EC2 instances are provisined based on the instance type (e.g. t2.micro) specified by <code class="code docutils literal notranslate"><span class="pre">instance_type</span> <span class="pre">=</span> <span class="pre">&quot;t2.micro&quot;</span></code>.</p>
+</section>
+<hr class="docutils" />
+<section id="owner">
+<h2>owner<a class="headerlink" href="#owner" title="Permalink to this headline"></a></h2>
+<p>All resource associated with the workshop are tagged with an <code class="code docutils literal notranslate"><span class="pre">owner</span></code> tag containing the name or shorthand of the person running the workshop environment.</p>
+</section>
+<hr class="docutils" />
+<section id="resource-prefix">
+<h2>resource_prefix<a class="headerlink" href="#resource-prefix" title="Permalink to this headline"></a></h2>
+<p>All resources are named based on the <code class="code docutils literal notranslate"><span class="pre">resource_prefix</span></code> specified in <code class="code docutils literal notranslate"><span class="pre">workdir/variables.tfvars</span></code>. E.g. the VPC name with <code class="code docutils literal notranslate"><span class="pre">resource_prefix</span> <span class="pre">=</span> <span class="pre">&quot;helloworld&quot;</span></code> is <code class="code docutils literal notranslate"><span class="pre">helloworld_vpc</span></code>. This increases transparency and in some cases resource names need to be unique.</p>
+</section>
+<hr class="docutils" />
+<section id="ami-name">
+<h2>ami_name<a class="headerlink" href="#ami-name" title="Permalink to this headline"></a></h2>
+<p>The Amazon Machine Image Name, or partial name with regex, used to boot the ec2 instance(s). Do not change this unless you know what you are doing.</p>
+</section>
+<hr class="docutils" />
+<section id="ami-owners">
+<h2>ami_owners<a class="headerlink" href="#ami-owners" title="Permalink to this headline"></a></h2>
+<p>The owner ids of allowed AMIs. Do not change this unless you know what you are doing.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="access.html" class="btn btn-neutral float-left" title="Access a Workshop Instance" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../workshop_list.html" class="btn btn-neutral float-right" title="Available Workshops" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
