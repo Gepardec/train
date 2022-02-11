@@ -8,3 +8,4 @@
 workdir
 docs/build
 *.iml
+.idea/
