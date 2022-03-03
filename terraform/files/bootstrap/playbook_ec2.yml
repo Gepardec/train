@@ -5,7 +5,7 @@
        become: yes
        user:
          name: "{{ ansible_user }}"
-         password: "$6$7VxnH6FvL3TLv/RW$nQ5d6GvNfgOARbb4Rwv6TE677S8mvKcxMldr9H33R5xOVEaT/bhVHQsGx4ScpmoPK6LZAtnxZAFs9IGZPWJ8v1"
+         password: "{{ 'fedora@trouble' | password_hash('sha512') }}"
      - name: Install needed packages
        become: yes
        dnf: name=podman,podman-compose,unzip,git,time,bc,chromium,gedit,net-tools state=installed
@@ -16,13 +16,17 @@
          state: directory
          path: "{{ ansible_env.HOME }}/{{ item }}"
      - name: Copy nomachine
+       tags: reconfigure
        copy:
-         src: /home/hwirnsberger/trainings/packer-vms/troubleshooting_vm/bin/nomachine-enterprise-desktop_6.9.2_1_x86_64.rpm
-         dest: "{{ ansible_env.HOME }}/Downloads/nomachine-enterprise-desktop_6.9.2_1_x86_64.rpm"
+         src: /home/hwirnsberger/trainings/packer-vms/troubleshooting_vm/bin/nomachine-enterprise-desktop_7.6.2_4_x86_64.rpm
+         dest: "{{ ansible_env.HOME }}/Downloads/nomachine-enterprise-desktop_7.6.2_4_x86_64.rpm"
      - name: Install nomachine
+       become: yes
+       shell: "dnf install -y {{ ansible_env.HOME }}/Downloads/nomachine-enterprise-desktop_7.6.2_4_x86_64.rpm"
+     - name: Reinstall nomachine
        tags: reconfigure
        become: yes
-       shell: "rm -rf /usr/NX && dnf install -y {{ ansible_env.HOME }}/Downloads/nomachine-enterprise-desktop_6.9.2_1_x86_64.rpm"
+       shell: "dnf remove nomachine-enterprise-desktop_6.9.2_1_x86_64 && rm -rf /usr/NX && dnf install -y {{ ansible_env.HOME }}/Downloads/nomachine-enterprise-desktop_7.6.2_4_x86_64.rpm"
      - name: Set Locales and Timezone
        become: yes
        shell: "localectl set-locale de_AT.UTF-8"
@@ -40,6 +44,18 @@
          src: /home/hwirnsberger/trainings/packer-vms/troubleshooting_vm/bin/elastic-apm/
          dest: "{{ ansible_env.HOME }}/elastic-apm/"
      - name: Start Elastic APM
+       become: yes
+       shell:
+         chdir: "{{ ansible_env.HOME }}/elastic-apm/"
+         cmd: "podman-compose up -d"
+     - name: Stop Elastic APM
+       tags: reconfigure
+       become: yes
+       shell:
+         chdir: "{{ ansible_env.HOME }}/elastic-apm/"
+         cmd: "podman-compose down"
+     - name: Start Elastic APM
+       tags: reconfigure
        become: yes
        shell:
          chdir: "{{ ansible_env.HOME }}/elastic-apm/"
