@@ -75,20 +75,4 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           platforms: linux/amd64, linux/arm64
           labels: ${{ steps.meta.outputs.labels }}
-
-  notify:
-    name: Slack Notifications
-    runs-on: ubuntu-latest
-    if: ${{ failure() }}
-    needs:
-      - build
-    steps:
-      - name: Notify Slack channel on failure
-        uses: rtCamp/action-slack-notify@v2
-        env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_ICON: https://github.com/ckaserer/logos/raw/master/docker.png
-          SLACK_USERNAME: ${{ github.repository }}
-          SLACK_COLOR: '#ff0033'
-          SLACK_FOOTER: ''
 ...
