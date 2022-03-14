@@ -44,7 +44,7 @@ function create_ansible_inventory {
   local counter=${1}
   local targetDir=${2}
 
-  echo """"$(terraform output -json instance_public_ips | jq ".[0][${counter}]" | tr -d '"')" ansible_user=fedora ansible_ssh_private_key_file=${targetDir}/${counter}/access""" >> ../${targetDir}/hosts
+  echo """${counter} ansible_host="$(terraform output -json instance_public_ips | jq ".[0][${counter}]" | tr -d '"')" ansible_user=TBD ansible_ssh_private_key_file=${counter}/access ansible_ssh_common_args='-o StrictHostKeyChecking=no'""" >> ../${targetDir}/hosts
 }
 
 function main {
@@ -100,7 +100,8 @@ function main {
       create_ansible_inventory ${counter} workdir/${resource_prefix}
       counter=$((counter - 1))
     done
-  fi  
+    chown -R 1000:1000 ../workdir/*
+  fi
 }
 
 main "$@"

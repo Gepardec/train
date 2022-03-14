@@ -18,7 +18,7 @@ variable "aws_region" {
 
 variable "bootstrap_file" {
   type = string
-  default = "helloworld.sh"
+  default = "dummy.sh"
   description = "Each EC2 instance will execute the bootstrap file specified by bootstrap_file. The file needs to exist in terraform/files/bootstrap/ and has the execution flag set"
 }
 
