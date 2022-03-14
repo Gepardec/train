@@ -2,6 +2,10 @@
 
 FLAG_DRYRUN=false
 
+BASE_DIR=$(pwd)
+WORKDIR=$BASE_DIR/workdir
+CALLBACKS=$WORKDIR/callbacks.sh
+
 # execute $COMMAND [$ALT_TEXT] [$FLAG_DRYRUN=false]
 # if command and FLAG_DRYRUN=true are set the command will be execuded
 # if command and FLAG_DRYRUN=false (or no 3rd argument is provided) 
@@ -45,6 +49,10 @@ function create_ansible_inventory {
   local targetDir=${2}
 
   echo """${counter} ansible_host="$(terraform output -json instance_public_ips | jq ".[0][${counter}]" | tr -d '"')" ansible_user=TBD ansible_ssh_private_key_file=${counter}/access ansible_ssh_common_args='-o StrictHostKeyChecking=no'""" >> ../${targetDir}/hosts
+}
+
+function callbacks_enabled {
+  test -f $CALLBACKS
 }
 
 function main {
@@ -101,7 +109,11 @@ function main {
       counter=$((counter - 1))
     done
     chown -R 1000:1000 ../workdir/*
+
+    callbacks_enabled && train_apply_postprocess
   fi
 }
+
+callbacks_enabled && . $CALLBACKS
 
 main "$@"
