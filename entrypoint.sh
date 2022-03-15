@@ -114,6 +114,10 @@ function main {
   fi
 }
 
+function train_apply_postprocess {
+  # May be implemented in callback.sh
+}
+
 callbacks_enabled && . $CALLBACKS
 
 main "$@"
