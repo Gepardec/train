@@ -115,7 +115,7 @@ function main {
 }
 
 function train_apply_postprocess {
-  # May be implemented in callback.sh
+  echo May be implemented in callback.sh
 }
 
 callbacks_enabled && . $CALLBACKS
