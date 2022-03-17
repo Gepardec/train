@@ -108,7 +108,6 @@ function main {
       create_ansible_inventory ${counter} workdir/${resource_prefix}
       counter=$((counter - 1))
     done
-    chown -R 1000:1000 ../workdir/*
 
     callbacks_enabled && train_apply_postprocess
   fi
