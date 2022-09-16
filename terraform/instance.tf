@@ -22,6 +22,7 @@ resource "aws_instance" "main" {
   subnet_id       = aws_subnet.main.id
   user_data       = file("files/bootstrap/${var.bootstrap_file}")
   vpc_security_group_ids = [aws_security_group.main.id]
+  volume_size     = var.volume_size
   
   root_block_device {
     delete_on_termination = true

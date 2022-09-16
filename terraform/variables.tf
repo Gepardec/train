@@ -33,6 +33,12 @@ variable "instance_type" {
   description = "EC2 instances are provisined with the instance type specified by instance_type"
 }
 
+variable "volume_size" {
+  type = number
+  default = 10
+  description = "Disk Space Size for Instance"
+}
+
 variable "owner" {
   type = string
   description = "All resource associated with the workshop are tagged with an owner tag containing the name or shorthand of the person running the workshop environment."
