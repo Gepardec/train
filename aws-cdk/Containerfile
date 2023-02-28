@@ -1,0 +1,19 @@
+ARG AWS_CDK_VERSION=2.66.0
+FROM maven:3.9.0-amazoncorretto-17
+
+RUN curl -sL https://rpm.nodesource.com/setup_16.x | sh -  \
+    && yum update -y \
+    && yum install -y nodejs jq \
+    && npm install -g aws-cdk@${AWS_CDK_VERSION} \
+    && yum clean all
+
+WORKDIR /train
+
+COPY cdk.json ./
+COPY src ./
+COPY pom.xml ./
+
+VOLUME [ "/root/.aws" ]
+VOLUME [ "/opt/app" ]
+
+CMD ["cdk", "--version"]
