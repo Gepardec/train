@@ -1,0 +1,56 @@
+= AWS CDK Java Training provisioning
+
+The listing below explains the possible configuration values.
+
+* `id` +
+A unique id string, which is added as a tag to all created resources
+* `account` +
+The account which provisions the AWS infrastructure, must correlate to the provided aws credentials
+* `region` +
+The region to the deploy the AWS infrastructure to
+* `ami` +
+The ami-id of the underlying x86 platform supporting EC2 image to use
+* `instanceCount` +
+The count of EC2 instances to create
+
+.Configuration example
+[source,sh]
+----
+{
+  "id": "containerizationTrainingGepardecLinz",
+  "account": "***",
+  "region": "eu-central-1",
+  "ami": "ami-06b4d9ba1f23a8da4",
+  "instanceCount": 1
+}
+----
+
+The command below shows you how to synthesize/provision/de-provision a training AWS infrastructure. +
+The following commands are supported.
+
+. `synth` (Default without a command) +
+Synthesizes the AWS infrastructure by creating the cloud formation resources which get deployed.
+Can be used to check if the configuration is valid and if the tolling works.
+. `deploy` +
+Synthesizes and deploys the AWS infrastructure with cloud formation.
+. `destroy` +
+Destroy the AWS infrastructure stack.
+
+IMPORTANT: Don't change the id after a AWS infrastructure has been provisioned, because otherwise it cannot be destroyed anymore.
+
+The following resources need to be provided via volumes.
+
+. `<YOUR_LOCAL_AWS_CONFIG_DIR>:/root/.aws` +
+The `.aws` directory on your maschine which is used to provision/de-provision the AWS infrastructure
+. `<YOUR_CONFIGURATION_DIRECTORY>:/config` +
+The configuration directory containing the `configuration.json` and which will receive the generated ssh-key-pairs, generated
+during the provisioning
+
+.Provision AWS infrastructure
+[source, sh]
+----
+docker run \
+    -v $(echo ~)/.aws:/root/.aws:ro \
+    -v$(pwd)/config:/config  \
+    train-aws-cdk:latest [synth | deploy | destroy]
+----

@@ -16,7 +16,6 @@ public class Configuration {
     public String id = UUID.randomUUID().toString();
     public String account;
     public String region;
-    public String training;
     public int instanceCount;
     public String ami;
 
@@ -33,7 +32,7 @@ public class Configuration {
     }
 
     public String idSuffix(String name) {
-        return name + training;
+        return name + id;
     }
 
     public static Configuration load() {

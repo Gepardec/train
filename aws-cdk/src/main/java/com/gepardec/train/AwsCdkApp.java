@@ -9,9 +9,9 @@ public class AwsCdkApp {
     public static void main(final String[] args) {
         var config = Configuration.load();
 
-        App app = new App();
+        var app = new App();
 
-        new EC2Stack(app, "TestTrainingStack", StackProps.builder()
+        new EC2Stack(app, config.idSuffix("TrainingAWSStack"), StackProps.builder()
                 .env(Environment.builder()
                         .account(config.account)
                         .region(config.region)
@@ -20,7 +20,6 @@ public class AwsCdkApp {
 
         Tags.of(app).add("id", config.id);
         Tags.of(app).add("owner", config.account);
-        Tags.of(app).add("training", config.training);
 
         app.synth();
     }
