@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 import java.util.UUID;
 
 public class Configuration {
+    private static final String CONFIG_PATH = System.getenv().getOrDefault("CONFIGURATION_DIR", "");
 
     private static Configuration CONFIG;
 
@@ -21,7 +22,7 @@ public class Configuration {
 
     public String indexedPublicKey(int idx) {
         try {
-            return Files.readString(Paths.get("id_rsa_" + idx + ".pub"));
+            return Files.readString(Paths.get(CONFIG_PATH).resolve("id_rsa_" + idx + ".pub"));
         } catch (IOException e) {
             throw new RuntimeException("Could not load public key", e);
         }
@@ -37,7 +38,7 @@ public class Configuration {
 
     public static Configuration load() {
         if (CONFIG == null) {
-            try (var is = Files.newInputStream(Paths.get("configuration.json"))) {
+            try (var is = Files.newInputStream(Paths.get(CONFIG_PATH).resolve("configuration.json"))) {
                 var jsonConfig = new JsonbConfig().withNullValues(true).withFormatting(true);
                 CONFIG = JsonbBuilder.create(jsonConfig).fromJson(is, Configuration.class);
             } catch (Exception e) {

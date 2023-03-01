@@ -3,17 +3,28 @@ FROM maven:3.9.0-amazoncorretto-17
 
 RUN curl -sL https://rpm.nodesource.com/setup_16.x | sh -  \
     && yum update -y \
-    && yum install -y nodejs jq \
+    && yum install -y nodejs jq ssh-keygen openssh-clients\
     && npm install -g aws-cdk@${AWS_CDK_VERSION} \
     && yum clean all
 
-WORKDIR /train
 
-COPY cdk.json ./
-COPY src ./
-COPY pom.xml ./
+ENV CONFIGURATION_DIR /config
+ENV EXECUTION_DIR /train
+
+WORKDIR ${EXECUTION_DIR}
+
+COPY entrypoint.sh /
+COPY cdk.json ./cdk-template.json
+COPY cdk.context.json ./
+COPY target/gepardec-train-aws-cdk.jar ./cdk-infra.jar
+
+RUN chmod 700 /entrypoint.sh \
+    && jq '.app = "java -jar cdk-infra.jar"' cdk-template.json > cdk.json \
+    && rm -f cdk-template.json
 
 VOLUME [ "/root/.aws" ]
-VOLUME [ "/opt/app" ]
+VOLUME [ "${CONFIGURATION_DIR}" ]
 
-CMD ["cdk", "--version"]
+ENTRYPOINT ["/entrypoint.sh"]
+
+CMD ["synth"]
