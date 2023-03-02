@@ -8,8 +8,8 @@ if [[ ${INSTANCE_COUNT} =~ ${NUMBER_REGEX} ]]; then
     echo "Generating ssh key-pairs for instanceCount '${INSTANCE_COUNT}'"
     let counter=0
     while [[ counter -lt ${INSTANCE_COUNT} ]]; do
-        ssh-keygen -t rsa -b 4096 -f ${CONFIGURATION_DIR}/id_rsa_${counter} -q -N ''
         echo "Generating ssh key-pair for instance '${counter}'"
+        ssh-keygen -t rsa -b 4096 -f ${CONFIGURATION_DIR}/id_rsa_${counter} -q -N ''
         counter=$((counter + 1))
     done
   fi

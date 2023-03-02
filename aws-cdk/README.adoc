@@ -1,6 +1,12 @@
 = AWS CDK Java Training provisioning
 
-The listing below explains the possible configuration values.
+This application is used to provision an AWS EC2 backed infrastructure depending on the provided configuration. +
+See the follwoing section on how to provide a configuration and how to provision/de-provision the AWS infrastructure.
+
+== Provide the configuration
+
+The configuration for the AWS infrastructure is provided via a json file named `configuration.json` which defines the
+following configurations.
 
 * `id` +
 A unique id string, which is added as a tag to all created resources
@@ -25,8 +31,21 @@ The count of EC2 instances to create
 }
 ----
 
-The command below shows you how to synthesize/provision/de-provision a training AWS infrastructure. +
-The following commands are supported.
+IMPORTANT: Don't change the id after a AWS infrastructure has been provisioned, because otherwise it cannot be destroyed anymore.
+
+== How to bootstrap your training environment
+
+You can configure your training environment with a bootstrap script file named `bootstrap.sh`. +
+
+IMPORTANT: The script must be executable on the used Linux distribution you defined via the `ami` configuration parameter.
+
+== How to provision/de-provision an AWS infrastructure
+
+The AWS infrastructure is packaged to a JAR and packaged in a Container-Image which provides all necessary tooling for
+provisioning/de-provisioning the AWS infrastructure. The only thing you need is to have a initialized cdk in AWS CloudFormation,
+which is used to create your infrastructure stack.
+
+The following commands are the main commands for the aws cdk tooling:
 
 . `synth` (Default without a command) +
 Synthesizes the AWS infrastructure by creating the cloud formation resources which get deployed.
@@ -36,15 +55,14 @@ Synthesizes and deploys the AWS infrastructure with cloud formation.
 . `destroy` +
 Destroy the AWS infrastructure stack.
 
-IMPORTANT: Don't change the id after a AWS infrastructure has been provisioned, because otherwise it cannot be destroyed anymore.
-
-The following resources need to be provided via volumes.
+The configuration is mapped into the container as volumes and the necessary mounts are:
 
 . `<YOUR_LOCAL_AWS_CONFIG_DIR>:/root/.aws` +
 The `.aws` directory on your maschine which is used to provision/de-provision the AWS infrastructure
-. `<YOUR_CONFIGURATION_DIRECTORY>:/config` +
-The configuration directory containing the `configuration.json` and which will receive the generated ssh-key-pairs, generated
-during the provisioning
+. `<YOUR_LOCAL_CONFIG_DIRECTORY>:/config` +
+The configuration directory containing the `configuration.json` and optionally a `bootstra.sh` file for configuring
+and preparing your training environment. this directory will also receive the generated ssh-key-pairs, generated
+during the provisioning.
 
 .Provision AWS infrastructure
 [source, sh]
@@ -54,3 +72,5 @@ docker run \
     -v$(pwd)/config:/config  \
     train-aws-cdk:latest [synth | deploy | destroy]
 ----
+
+IMPORTANT: See the logs for the public IPs and the DNS names of the created EC2 instances.

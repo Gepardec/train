@@ -4,20 +4,35 @@ import jakarta.json.bind.JsonbBuilder;
 import jakarta.json.bind.JsonbConfig;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Optional;
 import java.util.UUID;
 
 public class Configuration {
-    private static final String CONFIG_PATH = System.getenv().getOrDefault("CONFIGURATION_DIR", "");
+    private static final String CONFIG_PATH = System.getenv().getOrDefault("CONFIGURATION_DIR", "config");
+    private static final Path BOOTSTRAP_SCRIPT = Paths.get(CONFIG_PATH).resolve("bootstrap.sh");
 
-    private static Configuration CONFIG;
+    public static Configuration CONFIG = load();
 
-    public String id = UUID.randomUUID().toString();
+    public String id;
     public String account;
     public String region;
     public int instanceCount;
     public String ami;
+
+    public Optional<String> bootstrapFile() {
+        try {
+            if (Files.exists(BOOTSTRAP_SCRIPT)) {
+                return Optional.of(Files.readString(BOOTSTRAP_SCRIPT, StandardCharsets.UTF_8));
+            }
+            return Optional.empty();
+        } catch (IOException e) {
+            throw new RuntimeException("Boostrap files could not be listed", e);
+        }
+    }
 
     public String indexedPublicKey(int idx) {
         try {
@@ -35,7 +50,7 @@ public class Configuration {
         return name + id;
     }
 
-    public static Configuration load() {
+    private static Configuration load() {
         if (CONFIG == null) {
             try (var is = Files.newInputStream(Paths.get(CONFIG_PATH).resolve("configuration.json"))) {
                 var jsonConfig = new JsonbConfig().withNullValues(true).withFormatting(true);

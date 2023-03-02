@@ -7,7 +7,7 @@ import software.amazon.awscdk.Tags;
 
 public class AwsCdkApp {
     public static void main(final String[] args) {
-        var config = Configuration.load();
+        var config = Configuration.CONFIG;
 
         var app = new App();
 

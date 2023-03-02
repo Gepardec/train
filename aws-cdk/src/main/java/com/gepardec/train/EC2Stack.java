@@ -13,7 +13,7 @@ import java.util.stream.IntStream;
 
 public class EC2Stack extends Stack {
 
-    private static final Configuration config = Configuration.load();
+    private static final Configuration config = Configuration.CONFIG;
 
     public EC2Stack(final Construct scope, final String id) {
         this(scope, id, null);
@@ -24,7 +24,7 @@ public class EC2Stack extends Stack {
 
         var subnetConfigs = IntStream.range(0, config.instanceCount).mapToObj(idx -> createSubnetConfigurationForInstance(config, idx)).collect(Collectors.toList());
         var keyPairs = IntStream.range(0, config.instanceCount).mapToObj(i -> createKeyPairForInstance(i)).collect(Collectors.toList());
-        var vpc = createVpcForSubnets(subnetConfigs, config);
+        var vpc = createVpcForSubnets(subnetConfigs);
         var securityGroup = createSecurityGroup(vpc);
         var ec2Instances = IntStream.range(0, config.instanceCount).mapToObj(idx -> createEc2Instances(config, vpc, securityGroup, keyPairs.get(idx), idx)).collect(Collectors.toList());
 
@@ -60,7 +60,7 @@ public class EC2Stack extends Stack {
                 .build();
     }
 
-    Vpc createVpcForSubnets(List<SubnetConfiguration> subnets, Configuration config) {
+    Vpc createVpcForSubnets(List<SubnetConfiguration> subnets) {
         return Vpc.Builder.create(this, config.idSuffix("VPC"))
                 .ipAddresses(IpAddresses.cidr("10.0.0.0/16"))
                 .enableDnsHostnames(true)
@@ -71,14 +71,17 @@ public class EC2Stack extends Stack {
     }
 
     Instance createEc2Instances(Configuration config, Vpc vpc, SecurityGroup securityGroup, CfnKeyPair keyPair, int idx) {
-        return Instance.Builder.create(this, config.indexedIdSuffix("EC2Instance", idx))
+        var instance = Instance.Builder.create(this, config.indexedIdSuffix("EC2Instance", idx))
                 .instanceName(config.indexedIdSuffix("EC2Instance", idx))
                 .machineImage(MachineImage.genericLinux(Map.of(getRegion(), config.ami)))
                 .instanceType(InstanceType.of(InstanceClass.T2, InstanceSize.MEDIUM))
                 .vpc(vpc)
                 .keyName(keyPair.getKeyName())
                 .securityGroup(securityGroup)
-                .allowAllOutbound(true)
                 .build();
+
+        config.bootstrapFile().ifPresent(instance::addUserData);
+
+        return instance;
     }
 }
