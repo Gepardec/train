@@ -3,7 +3,7 @@ ARG AWS_CDK_VERSION=2.67.0
 
 RUN curl -sL https://rpm.nodesource.com/setup_16.x | sh -  \
     && yum update -y \
-    && yum install -y nodejs jq openssh-clients\
+    && yum install -y nodejs jq openssh-clients bash \
     && npm install -g aws-cdk@${AWS_CDK_VERSION} \
     && yum clean all
 

@@ -11,7 +11,7 @@ public class AwsCdkApp {
 
         var app = new App();
 
-        new EC2Stack(app, config.idSuffix("TrainingAWSStack"), StackProps.builder()
+        new EC2Stack(app, config.idSuffix("EC2Stack"), StackProps.builder()
                 .env(Environment.builder()
                         .account(config.account)
                         .region(config.region)

@@ -30,8 +30,8 @@ public class EC2Stack extends Stack {
 
         for (int i = 0; i < config.instanceCount; i++) {
             var instance = ec2Instances.get(i);
-            CfnOutput.Builder.create(this, "EC2 Public IP of Instance " + i).value(instance.getInstancePublicIp()).build();
-            CfnOutput.Builder.create(this, "EC2 Public DNS of Instance " + i).value(instance.getInstancePublicDnsName()).build();
+            CfnOutput.Builder.create(this, config.indexedIdSuffix("PublicDNS", i)).value(instance.getInstancePublicIp()).build();
+            CfnOutput.Builder.create(this, config.indexedIdSuffix("PublicIP", i)).value(instance.getInstancePublicDnsName()).build();
         }
     }
 
