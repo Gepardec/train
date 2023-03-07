@@ -15,7 +15,6 @@ WORKDIR ${EXECUTION_DIR}
 
 COPY entrypoint.sh ${EXECUTION_DIR}/
 COPY cdk.json ./cdk-template.json
-COPY cdk.context.json ./
 COPY target/gepardec-train-aws-cdk.jar ./cdk-infra.jar
 
 RUN chmod 700 /train/entrypoint.sh \
