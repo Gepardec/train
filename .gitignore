@@ -1,11 +1,26 @@
 .DS_Store
 
-.terraform
-*.tfstate
-*.tfstate.backup
-*.tfstate.lock.info
+.classpath.txt
+target
+.classpath
+.project
+.idea
+.settings
+.vscode
+*.iml
+cdk.context.json
+config/
+out/
+dependency-reduced-pom.xml
 
-workdir
+# CDK asset staging directory
+.cdk.staging
+cdk.out
+
+workdir/
+out/
+config
 docs/build
 *.iml
 .idea/
+.vscode/

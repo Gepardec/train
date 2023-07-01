@@ -1,0 +1,140 @@
+= AWS CDK Java Training provisioning
+
+Providing a frictionless experience for workshop participants with hands on, technical sections is key to focus on what is important - hands on learning and experimenting with new technology.
+
+It should be easy to work through the hands on labs no matter the operating system or hardware specification of your system. So, how can we provide this magical environment? Find out more on our github page.
+
+== Creating an infrastructure
+
+== Preconditions
+
+You need to have a CDK bootstrap done, and aws-cdk configured, meaning there are credentials in `~/.aws`.
+
+=== Provide the configuration
+
+The configuration for the AWS infrastructure is provided via a json file named `configuration.json` which defines the
+following configurations.
+
+* `id` +
+A unique id string, which is added as a tag to all created resources
+* `account` +
+The account which provisions the AWS infrastructure, must correlate to the provided aws credentials
+* `region` +
+The region to the deploy the AWS infrastructure to
+* `ami` +
+The ami-id of the underlying x86 platform supporting EC2 image to use
+* `instanceCount` +
+The count of EC2 instances to create
+
+.Configuration example
+[source,sh]
+----
+{
+  "id": "containerizationTrainingGepardecLinz",
+  "account": "***",
+  "region": "eu-central-1",
+  "ami": "ami-06b4d9ba1f23a8da4",
+  "instanceCount": 1
+}
+----
+
+IMPORTANT: Don't change the id after a AWS infrastructure has been provisioned, because otherwise it cannot be destroyed anymore.
+
+=== How to bootstrap your training environment
+
+You can configure your training environment with a bootstrap script file named `bootstrap.sh`. +
+
+IMPORTANT: The script must be executable on the used Linux distribution you defined via the `ami` configuration parameter.
+
+=== How to provide callbacks 
+
+You can provide a callback script `callback.sh` which gets executed after the `deploy` step has been finished. 
+
+IMPORTANT: This script must be executable within the running container.
+
+The following resources are available after a `deploy` of an training environment `callback.sh` script.
+
+* `/out/id_rsa<IDX>`
+* `/out/id_rsa<IDX>.pub`
+* `/out/training-info.json``
+
+The following environment variables are available during the execution of the `callback.sh` script.
+
+* `CONFIGURATION_DIR`
+* `OUT_DIR`
+* `EXECUTION_DIR``
+
+Useful commands in the `callback.sh` script.
+
+* `jq '.EC2Stack<TRAINING-ID>.instance[IP | URI]<INSTANCE_IDX>' ${OUT_DIR}/training-info.json` +
+Extracts the instance `ip` or `uri` where the instance can be addressed
+* `jq '.instanceCount' ${CONFIGURATION_DIR}/configuration.json` +
+Gets the configured instance count
+
+=== How to provision/de-provision an AWS infrastructure
+
+The AWS infrastructure is packaged to a JAR and packaged in a Container-Image which provides all necessary tooling for
+provisioning/de-provisioning the AWS infrastructure. The only thing you need is to have a initialized cdk in AWS CloudFormation,
+which is used to create your infrastructure stack.
+
+The following commands are the main commands for the aws cdk tooling:
+
+. `synth` (Default without a command) +
+Synthesizes the AWS infrastructure by creating the cloud formation resources which get deployed.
+Can be used to check if the configuration is valid and if the tolling works.
+. `deploy` +
+Synthesizes and deploys the AWS infrastructure with cloud formation.
+. `destroy` +
+Destroy the AWS infrastructure stack.
+
+The configuration is mapped into the container as volumes and the necessary mounts are:
+
+. `<YOUR_LOCAL_AWS_CONFIG_DIR>:/root/.aws` +
+The `.aws` directory on your maschine which is used to provision/de-provision the AWS infrastructure
+. `<YOUR_LOCAL_CONFIG_DIRECTORY>:/config` +
+The configuration directory containing the `configuration.json` and optionally a `bootstra.sh` file for configuring
+and preparing your training environment.
+. `<YOUR_LOCAL_OUT_DIRECTORY>:/out` +
+Here you will find your generated ssh-key-pairs and the `training-info.json` containing the public DNS and IP addresses fo the generated instances
+
+.Provision AWS infrastructure
+[source, sh]
+----
+docker run \
+    -v $(echo ~)/.aws:/root/.aws:ro \
+    -v$(pwd)/config:/config  \
+    -v$(pwd)/out:/out  \
+    train-aws-cdk:latest [synth | deploy | destroy]
+----
+
+IMPORTANT: See the logs for the public IPs and the DNS names of the created EC2 instances.
+
+== Developing
+
+The AWS infrastructure can be provisioned without the Container Image as well but the following preconditions must be met.
+
+*Installed tooling:*
+
+. `nodejs 16.x`
+. `aws-cdk@2.67.0` (npm package)
+. `Java 17`
+. `Maven 3.8.x`
+
+*Directories at the root of the project*
+
+. `config` +
+Containing `configuration.json` and optionally `bootstrap.sh`, `callback.sh`
+. `out` +
+The generated `id_rsa_<n>` `id_rsa_<n>.pub` ssh-key-pairs as much as you define the `instanceCount`
+
+.Synthesize the infrastructure definition
+[source,sh]
+----
+cdk synth
+----
+
+.Provision/De-provision
+[source,sh]
+----
+cdk [deploy | destroy]
+----
