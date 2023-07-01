@@ -41,9 +41,13 @@ public class Configuration {
             throw new RuntimeException("Could not load public key", e);
         }
     }
+    
+    public String indexed(String name, int i) {
+        return name + i;
+    }
 
     public String indexedIdSuffix(String name, int i) {
-        return idSuffix(name) + i;
+        return indexed(idSuffix(name), i);
     }
 
     public String idSuffix(String name) {

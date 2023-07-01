@@ -45,6 +45,31 @@ You can configure your training environment with a bootstrap script file named `
 
 IMPORTANT: The script must be executable on the used Linux distribution you defined via the `ami` configuration parameter.
 
+=== How to provide callbacks 
+
+You can provide a callback script `callback.sh` which gets executed after the `deploy` step has been finished. 
+
+IMPORTANT: This script must be executable within the running container.
+
+The following resources are available after a `deploy` of an training environment `callback.sh` script.
+
+* `/out/id_rsa<IDX>`
+* `/out/id_rsa<IDX>.pub`
+* `/out/training-info.json``
+
+The following environment variables are available during the execution of the `callback.sh` script.
+
+* `CONFIGURATION_DIR`
+* `OUT_DIR`
+* `EXECUTION_DIR``
+
+Useful commands in the `callback.sh` script.
+
+* `jq '.EC2Stack<TRAINING-ID>.instance[IP | URI]<INSTANCE_IDX>' ${OUT_DIR}/training-info.json` +
+Extracts the instance `ip` or `uri` where the instance can be addressed
+* `jq '.instanceCount' ${CONFIGURATION_DIR}/configuration.json` +
+Gets the configured instance count
+
 === How to provision/de-provision an AWS infrastructure
 
 The AWS infrastructure is packaged to a JAR and packaged in a Container-Image which provides all necessary tooling for
@@ -97,9 +122,9 @@ The AWS infrastructure can be provisioned without the Container Image as well bu
 *Directories at the root of the project*
 
 . `config` +
-Containing `configuration.json` and optionally `bootstrap.sh`
+Containing `configuration.json` and optionally `bootstrap.sh`, `callback.sh`
 . `out` +
-The `id_rsa_<n>` `id_rsa_<n>.pub` ssh-key-pairs as much as you define the `instanceCount`
+The generated `id_rsa_<n>` `id_rsa_<n>.pub` ssh-key-pairs as much as you define the `instanceCount`
 
 .Synthesize the infrastructure definition
 [source,sh]
