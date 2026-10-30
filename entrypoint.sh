@@ -33,22 +33,22 @@ function execute () {
 function usage {
   echo 
   echo 'docker run --rm -it -v $(echo ~)/.aws:/root/.aws:ro -v $(pwd):/opt/train/workdir gepardec/train COMMAND'
-  echo "Available commands: valid terraform commands such as apply or destroy"
+  echo "Available commands: valid tofu commands such as apply or destroy"
 }
 
 function create_readme {
   local counter=${1}
   local targetDir=${2}
 
-  echo """IP: "$(terraform output -json instance_public_ips | jq ".[0][${counter}]" | tr -d '"')" """ > ${targetDir}/readme.txt
-  echo """DNS: "$(terraform output -json instance_public_dns | jq ".[0][${counter}]" | tr -d '"')" """ >> ${targetDir}/readme.txt
+  echo """IP: "$(tofu output -json instance_public_ips | jq ".[0][${counter}]" | tr -d '"')" """ > ${targetDir}/readme.txt
+  echo """DNS: "$(tofu output -json instance_public_dns | jq ".[0][${counter}]" | tr -d '"')" """ >> ${targetDir}/readme.txt
 }
 
 function create_ansible_inventory {
   local counter=${1}
   local targetDir=${2}
 
-  echo """${counter} ansible_host="$(terraform output -json instance_public_ips | jq ".[0][${counter}]" | tr -d '"')" ansible_user=TBD ansible_ssh_private_key_file=${counter}/access ansible_ssh_common_args='-o StrictHostKeyChecking=no'""" >> ../${targetDir}/hosts
+  echo """${counter} ansible_host="$(tofu output -json instance_public_ips | jq ".[0][${counter}]" | tr -d '"')" ansible_user=TBD ansible_ssh_private_key_file=${counter}/access ansible_ssh_common_args='-o StrictHostKeyChecking=no'""" >> ../${targetDir}/hosts
 }
 
 function callbacks_enabled {
@@ -83,7 +83,7 @@ function main {
   cd terraform
 
   # initialize terraform
-  execute "terraform init -backend-config='key=${backend_config_key}'"
+  execute "tofu init -backend-config='key=${backend_config_key}'"
 
   # create ssh keys
   instance_replica=$((instance_replica - 1))
@@ -97,7 +97,7 @@ function main {
   fi  
 
   # execute terraform
-  execute "terraform $* -var-file='../workdir/variables.tfvars' -auto-approve"
+  execute "tofu $* -var-file='../workdir/variables.tfvars' -auto-approve"
 
   # create readme and ansible inventory
   if [[ "${1}" == "apply" ]]; then 
