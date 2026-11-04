@@ -1,0 +1,11 @@
+---
+- name: Copy nginx conf
+  become: true
+  ansible.builtin.template:
+    src: nginx.conf.j2
+    dest: /etc/nginx/nginx.conf
+  notify: Reload Nginx
+
+- name: Force Nginx reload before proceeding to ACME challenges
+  become: true
+  ansible.builtin.meta: flush_handlers

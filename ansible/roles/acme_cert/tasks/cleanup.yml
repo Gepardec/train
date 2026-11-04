@@ -1,0 +1,13 @@
+---
+- name: Ensure correct permissions on private key
+  become: true
+  ansible.builtin.file:
+    path: "{{ cert_dir }}/privkey.pem"
+    mode: '0644'
+
+- name: Ensure Nginx is stopped and disabled after ACME challenge
+  become: true
+  ansible.builtin.systemd_service:
+    name: nginx
+    state: stopped
+    enabled: false

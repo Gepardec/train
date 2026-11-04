@@ -1,0 +1,17 @@
+---
+- name: Prepare 
+  ansible.builtin.import_tasks: prepare.yml
+
+- name: Configure NGINX 
+  ansible.builtin.import_tasks: nginx.yml
+
+- name: ACME create Certificate Signing Request 
+  ansible.builtin.import_tasks: acme_01_csr.yml
+
+- name: ACME HTTP Challenge 
+  ansible.builtin.import_tasks: acme_02_challenge.yml
+
+
+- name: Cleanup 
+  ansible.builtin.import_tasks: cleanup.yml
+

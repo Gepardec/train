@@ -1,0 +1,43 @@
+---
+- name: Create ACME challenge (Stage 1 - Request)
+  become: true
+  community.crypto.acme_certificate:
+    account_key_src: "{{ account_key_dir }}/account.key"
+    account_email: "{{ acme_email }}"
+    src: "{{ cert_dir }}/{{ domain_name }}.csr"
+    dest: "{{ cert_dir }}/cert.pem"
+    acme_directory: "{{ acme_directory }}"
+    acme_version: 2
+    terms_agreed: yes
+    challenge: http-01
+  register: acme_challenge
+
+- name: Fulfill the http-01 challenge by writing the validation file
+  become: true
+  ansible.builtin.copy:
+    dest: "{{ challenge_dir }}/{{ acme_challenge['challenge_data'][domain_name]['http-01']['resource'] | basename }}"
+    content: "{{ acme_challenge['challenge_data'][domain_name]['http-01']['resource_value'] }}"
+  when: acme_challenge is changed and domain_name in acme_challenge['challenge_data']
+
+- name: Complete ACME challenge (Stage 2 - Validation)
+  become: true
+  community.crypto.acme_certificate:
+    account_key_src: "{{ account_key_dir }}/account.key"
+    account_email: "{{ acme_email }}"
+    src: "{{ cert_dir }}/{{ domain_name }}.csr"
+    dest: "{{ cert_dir }}/cert.pem"
+    fullchain_dest: "{{ cert_dir }}/fullchain.pem"
+    chain_dest: "{{ cert_dir }}/chain.pem"
+    acme_directory: "{{ acme_directory }}"
+    acme_version: 2
+    terms_agreed: yes
+    challenge: http-01
+    data: "{{ acme_challenge }}"
+  when: acme_challenge is changed
+
+- name: Clean up ACME challenge validation file
+  become: true
+  ansible.builtin.file:
+    path: "{{ challenge_dir }}/{{ acme_challenge['challenge_data'][domain_name]['http-01']['resource'] | basename }}"
+    state: absent
+  when: acme_challenge is changed and domain_name in acme_challenge['challenge_data']

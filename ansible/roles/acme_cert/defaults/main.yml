@@ -1,0 +1,2 @@
+account_key_dir: "/etc/ssl/acme"
+challenge_dir: "/var/www/html/.well-known/acme-challenge"
