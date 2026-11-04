@@ -11,7 +11,7 @@ terraform {
   }
 
   backend "s3" {
-    bucket="gepardec-terraform-state"
-    region="us-east-1"
+    bucket="gepardec-terraform-state-eu"
+    region="eu-central-1"
   }
 }
