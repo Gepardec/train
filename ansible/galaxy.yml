@@ -10,4 +10,5 @@ license:
 tags:
   - acme
   - infrastructure
-dependencies: {}
+dependencies:
+  - community.crypto
