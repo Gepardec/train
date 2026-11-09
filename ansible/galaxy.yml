@@ -11,4 +11,4 @@ tags:
   - acme
   - infrastructure
 dependencies:
-  - community.crypto
+  community.crypto: ">=3.0.0, <4.0.0"
