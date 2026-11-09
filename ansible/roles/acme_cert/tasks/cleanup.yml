@@ -3,7 +3,7 @@
   become: true
   ansible.builtin.file:
     path: "{{ cert_dir }}/privkey.pem"
-    mode: '0644'
+    mode: '0600'
 
 - name: Ensure Nginx is stopped and disabled after ACME challenge
   become: true
