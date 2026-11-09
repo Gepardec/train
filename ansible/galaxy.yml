@@ -1,0 +1,14 @@
+namespace: gepardec
+name: train
+version: 1.0.0
+readme: README.md
+authors:
+  - "Moritz Siller <moritz.siller@gepardec.com>"
+description: "Internal Infra Roles to create Training-Environments"
+license:
+  - MIT
+tags:
+  - acme
+  - infrastructure
+dependencies:
+  community.crypto: ">=3.0.0,<4.0.0"

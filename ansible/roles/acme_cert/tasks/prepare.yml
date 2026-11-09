@@ -1,0 +1,26 @@
+---
+- name: Install needed packages
+  become: true
+  ansible.builtin.dnf:
+    name:
+      - pip
+      - nginx
+    state: present
+
+
+- name: Install python dependencies (cryptography)
+  become: true
+  ansible.builtin.pip:
+    name: 
+      - cryptography
+
+- name: Ensure required directories exist
+  become: true
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  loop:
+    - "{{ cert_dir }}"
+    - "{{ account_key_dir }}"
+    - "{{ challenge_dir }}"

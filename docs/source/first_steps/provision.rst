@@ -10,7 +10,12 @@ Requirements
 IAM programatic access
 ------------------------
 
-You need to create an AWS IAM user with programatic access and store the credentials on your workstation. For the rest of the doc we will assume that your aws credentials file exists as :code:`~/.aws/credentials`.
+You need to create an AWS IAM user with programatic access and store the credentials on your workstation. For the rest of the doc we will assume that your aws credentials file exists as :code:`~/.aws/config`.
+.. code-block:: txt
+   [default]
+   aws_access_key_id = __redacted__
+   aws_secret_access_key = __redacted__
+
 
 Provision a Workshop
 ------------------------
