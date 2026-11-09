@@ -44,13 +44,6 @@ function create_readme {
   echo """DNS: "$(tofu output -json instance_public_dns | jq ".[0][${counter}]" | tr -d '"')" """ >> ${targetDir}/readme.txt
 }
 
-function create_ansible_inventory {
-  local counter=${1}
-  local targetDir=${2}
-
-  echo """${counter} ansible_host="$(tofu output -json instance_public_ips | jq ".[0][${counter}]" | tr -d '"')" ansible_user=TBD ansible_ssh_private_key_file=${counter}/access ansible_ssh_common_args='-o StrictHostKeyChecking=no'""" >> ../${targetDir}/hosts
-}
-
 function callbacks_enabled {
   test -f $CALLBACKS
 }
@@ -99,13 +92,12 @@ function main {
   # execute terraform
   execute "tofu $* -var-file='../workdir/variables.tfvars' -auto-approve"
 
-  # create readme and ansible inventory
+  # create readme
   if [[ "${1}" == "apply" ]]; then 
     counter=${instance_replica}
     >../workdir/${resource_prefix}/hosts
     while [[ ${counter} -ge 0 ]]; do
       create_readme ${counter} ../workdir/${resource_prefix}/${counter}
-      create_ansible_inventory ${counter} workdir/${resource_prefix}
       counter=$((counter - 1))
     done
 
