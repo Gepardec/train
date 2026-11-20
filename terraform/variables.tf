@@ -48,3 +48,9 @@ variable "resource_prefix" {
   type = string
   description = "All resources are named based on the resource_prefix. E.g. the VPC name with resource_prefix = 'helloworld' is helloworld_vpc. This increases transparency and in some cases resource names need to be unique."
 }
+
+variable "deploy_key_id" {
+  type        = string
+  description = "ID of the manually created Deploy-Key (key-...)"
+  default     = "key-07fdd61212253c163"
+}

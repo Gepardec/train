@@ -18,7 +18,7 @@ resource "aws_instance" "main" {
   ami             = data.aws_ami.main.id
   count           = var.instance_replica
   instance_type   = var.instance_type
-  key_name        = "${var.resource_prefix}_${count.index}"
+  key_name        = data.aws_key_pair.main.key_name
   subnet_id       = aws_subnet.main.id
   user_data       = file("files/bootstrap/${var.bootstrap_file}")
   vpc_security_group_ids = [aws_security_group.main.id]
