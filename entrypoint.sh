@@ -78,13 +78,12 @@ function main {
   # initialize terraform
   execute "tofu init -backend-config='key=${backend_config_key}'"
 
-  # create ssh keys
+  # create manual directories
   instance_replica=$((instance_replica - 1))
   local counter=${instance_replica}
   if [[ "${1}" == "apply" ]]; then 
     while [[ ${counter} -ge 0 ]]; do
       execute "mkdir -p ../workdir/${resource_prefix}/${counter}"
-      execute "ssh-keygen -t rsa -b 4096 -f ../workdir/${resource_prefix}/${counter}/access -q -N ''"
       counter=$((counter - 1))
     done
   fi  
